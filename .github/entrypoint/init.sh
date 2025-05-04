@@ -56,7 +56,7 @@ if [[ "${JOBS_ID}" == "1" ]]; then
   if diff -qr ${GITHUB_WORKSPACE}/.github /home/runner/work/_actions/eq19/eq19/v2/.github >/dev/null; then
     echo -e "\n$hr\nCONFIG\n$hr"
     cat /home/runner/work/_actions/eq19/eq19/v2/.github/templates/jekyll_config.yml > $RUNNER_TEMP/_config.yml
-    export PATH=/home/runner/work/_actions/eq19/eq19/v2/.github/entrypoint:$PATH && artifact.sh
+    export PATH=/home/runner/work/_actions/eq19/eq19/v2/.github/entrypoint:$PATH && source artifact.sh
 
     cat $RUNNER_TEMP/orgs.json > $1/user_data/ft_client/test_client/results/orgs.json
     gh variable set JEKYLL_CONFIG --body "$(cat $RUNNER_TEMP/_config.yml)"

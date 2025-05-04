@@ -60,7 +60,7 @@ if [[ "${JOBS_ID}" == "1" ]]; then
 
     cat $RUNNER_TEMP/orgs.json > $1/user_data/ft_client/test_client/results/orgs.json
     gh variable set JEKYLL_CONFIG --body "$(cat $RUNNER_TEMP/_config.yml)"
-    gh variable get JEKYLL_CONFIG
+
     PARAMS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
       "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/variables/PARAMS_JSON" | jq -r '.value')
     echo "${PARAMS_JSON}" | jq '.' > $1/user_data/strategies/fibbo.json

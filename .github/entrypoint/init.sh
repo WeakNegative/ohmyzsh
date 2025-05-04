@@ -114,9 +114,12 @@ elif [[ "${JOBS_ID}" == "2" ]]; then
 
   echo -e "\n$hr\nGH BRANCHES\n$hr"
   cd $RUNNER_TEMP && mkdir my-project && cd my-project && git init -q
-  git remote add source $REMOTE_REPO && git remote add origin $TARGET_REPO
+  git remote add source "$REMOTE_REPO" && git remote add origin "$TARGET_REPO"
 
-  # Get list of existing target branches (once)
+  # Get fresh branch lists
+  git fetch --all
+
+  # Get list of existing target branches
   existing_target_branches=$(git ls-remote --heads origin | awk -F'/' '{print $3}')
 
   # Fetch only gh- branches from source
@@ -125,23 +128,34 @@ elif [[ "${JOBS_ID}" == "2" ]]; then
   # Process branches
   for remote_branch in $(git branch -r | grep 'source/gh-'); do
     local_branch=${remote_branch#source/}
-  
+    
     if ! grep -q "^$local_branch$" <<< "$existing_target_branches"; then
-      git checkout -b "$local_branch" "$remote_branch"
-      git push origin "$local_branch"
-      echo "Successfully pushed $local_branch to target"
-    #else
-      #if [[ "$local_branch" == "gh-pages" ]]; then
-        # Check if 'docs/' exists in the remote gh-pages tree
-        #if ! git ls-tree --name-only origin/gh-pages | grep -q "^docs/"; then
-          #echo "Re-pushed local gh-pages with docs"
-          #git push origin --delete gh-pages
-          #git push origin gh-pages
-        #fi
-      #fi
+      # New branch case
+      if [[ "$local_branch" =~ ^(gh-base|gh-source|gh-pages)$ ]]; then
+         git checkout -b "$local_branch" "$remote_branch" && \
+         git push origin "$local_branch" && \
+         echo "Successfully pushed $local_branch to target" || \
+         echo "Failed to push $local_branch"
+      fi
+    else
+      # Existing branch case
+      if [[ "$local_branch" == "gh-pages" ]]; then
+        # Check if 'docs/' exists in remote
+        if ! git ls-tree --name-only "origin/gh-pages" | grep -q "^docs/"; then
+          echo "No docs/ found - recreating gh-pages"
+          # Ensure local branch exists
+          if ! git show-ref --verify --quiet "refs/heads/gh-pages"; then
+            git checkout -b gh-pages "$remote_branch"
+          else
+            git checkout gh-pages
+            git reset --hard "$remote_branch"
+          fi
+          git push --force origin gh-pages
+        fi
+      fi
     fi
   done
-
+  
 elif [[ "${JOBS_ID}" == "3" ]]; then
 
   cd /home/runner/_site && rm -rf README.md docs && gist.sh ${BASE} $(pwd)
@@ -159,7 +173,11 @@ else
   find -not -path "./.git/*" -not -name ".git" -delete
 
   rm -rf ${RUNNER_TEMP//\\//}/gh-source/.git
-  shopt -s dotglob && mv -f ${RUNNER_TEMP//\\//}/gh-source/* . && ls -lR .
+  shopt -s dotglob && mv -f ${RUNNER_TEMP//\\//}/gh-source/* .
+
+  # Get the variable value and save to file.json
+  gh variable list
+  gh variable get JEKYLL_CONFIG > _config.yml && ls -lR .
 
 fi
 

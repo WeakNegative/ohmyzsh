@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: /grammar/sitemap_index.xml
+Sitemap: /ohmyzsh/sitemap_index.xml

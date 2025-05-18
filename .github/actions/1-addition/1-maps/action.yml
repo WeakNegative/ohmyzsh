@@ -127,15 +127,15 @@ runs:
       with:
         script: console.log(context)
 
-    #- uses: actions/setup-python@v5
-      #with:
-        #python-version: 3.12
-        #allow-prereleases: true
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.10
+        allow-prereleases: true
 
-    #- uses: actions/cache@v4
-      #with:
-        #path: ~/.cache/pip
-        #key: ${{ runner.os }}-pip
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip
 
     - name: 💎 Set ID Token
       id: 'auth'
@@ -164,8 +164,8 @@ runs:
         secrets=$(curl -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/actions/secrets" | jq -r '.secrets[].name')
         for secret in $secrets; do gh secret set $secret --repo ${{ env.TARGET_REPOSITORY }} --body "${!secret}"; done
 
-        #python -m pip -q install --upgrade pip
-        #python -m pip -q install -r ${{ inputs.action_path }}/dataFile/requirements.txt
+        python -m pip -q install --upgrade pip
+        python -m pip -q install -r ${{ inputs.action_path }}/dataFile/requirements.txt
   
         ##python -m pip -q install -e ./.github/entrypoint/artifact/python
         ##iree-compile --iree-llvmcpu-list-targets && iree-run-module --list_drivers

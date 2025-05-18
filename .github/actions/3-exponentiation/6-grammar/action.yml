@@ -106,17 +106,6 @@ runs:
   
         else      
           
-          if [[ -d /home/runner/_site ]]; then
-            rm -rf /mnt/disks/deeplearning/tmp/_site
-            mv -f /home/runner/_site /mnt/disks/deeplearning/tmp
-            cd /mnt/disks/deeplearning/tmp/_site && rm -rf .git .github .env .ssh .cache node-modules
-          fi
-
-          cd ${{ github.workspace }}
-          find -not -path "./.git/*" -not -name ".git" | grep git
-          find -not -path "./.git/*" -not -name ".git" -delete
-          shopt -s dotglob && cp -R /mnt/disks/deeplearning/tmp/_site/* .
-
         # Assign the environment variable correctly
           #COMMIT="${{ env.LATEST_COMMIT }}"
 

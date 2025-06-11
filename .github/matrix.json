@@ -1,0 +1,5 @@
+[
+  { "strategy": "fibbo", "loss": "sharpe", "space": "buy" },
+  { "strategy": "fibbo", "loss": "expectancy", "space": "sell" },
+  { "strategy": "ichiV1", "loss": "sharpe", "space": "protection" }
+]

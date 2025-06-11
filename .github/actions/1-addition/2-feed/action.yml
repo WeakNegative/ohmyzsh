@@ -150,7 +150,7 @@ runs:
         env: |
           ID=${{ env.ID }}
           GH_TOKEN=${{ env.GH_TOKEN }}
-          REMOTE_REPO=${{ env.REMOTE_REPO }}
+          REMOTE_REPO=${{ inputs.repository }}
           BEARER=${{ steps.auth.outputs.id_token }}
           TARGET_REPOSITORY=${{ env.TARGET_REPOSITORY }}
 

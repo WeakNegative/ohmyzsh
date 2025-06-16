@@ -1,10 +1,10 @@
-id: 151
+id: 138
 user: eq19
-span: span-132
+span: span-119
 title: eQuantum
 baseurl: /ohmyzsh
 repository: WeakNegative/ohmyzsh
-action: WeakNegative/grammar/actions/runs/15646989325
+action: WeakNegative/grammar/actions/runs/15675085993
 description: eQuantum Project - Weak Negative Boson
 
 #debug:
@@ -48,6 +48,6 @@ plugins:
   - jekyll-optional-front-matter
 
 track:
-  spin: [11, 7]
+  spin: [10, 7]
   pinned: [maps, feed, lexer, parser, syntax, grammar, ohmyzsh, grub, scrapy, screen, wpt, slickmap]
   organization: [Chetabahana, FeedMapping, GlobalZones, HybridModels, JunctionTerms, KernelPatterns, MappingSystem, NeuralSystem, ObjectModules, VirtualNetworks, WeakNegative, WeakPositive, ZeroWeak]
